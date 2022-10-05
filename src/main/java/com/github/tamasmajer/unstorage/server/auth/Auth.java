@@ -6,8 +6,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "auth", indexes = {
+        @Index(name = "auth_by_user", columnList = "user", unique = true),
         @Index(name = "auth_by_token", columnList = "token", unique = true),
-        @Index(name = "auth_by_user", columnList = "user", unique = false)
 })
 public class Auth {
 
@@ -16,11 +16,11 @@ public class Auth {
     @Column(name = "id", unique = true, nullable = false)
     private UUID id;
 
+    @Column(name = "user", unique = true, nullable = false)
+    private String user;
+
     @Column(name = "token", unique = true, nullable = false)
     private String token;
-
-    @Column(name = "user", unique = false, nullable = false)
-    private String user;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "timestamp", nullable = false)
@@ -31,10 +31,10 @@ public class Auth {
     }
 
 
-    public Auth(String token, String user) {
+    public Auth(String user, String token) {
         super();
-        this.token = token;
         this.user = user;
+        this.token = token;
     }
 
     @PrePersist
@@ -79,8 +79,8 @@ public class Auth {
     public String toString() {
         return "Auth{" +
                 "id=" + id +
-                ", token='" + token + '\'' +
                 ", user='" + user + '\'' +
+                ", token='" + token + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }

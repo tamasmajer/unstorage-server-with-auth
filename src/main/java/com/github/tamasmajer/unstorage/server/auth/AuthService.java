@@ -9,11 +9,12 @@ public interface AuthService {
 
     void delete(Auth auth);
 
+    Integer deleteByUser(String user);
     Integer deleteByToken(String token);
 
     List<Auth> findAll();
 
     Optional<Auth> findByToken(String token);
 
-    List<Auth> findByUser(String user);
+    Optional<Auth> findByUser(String user);
 }

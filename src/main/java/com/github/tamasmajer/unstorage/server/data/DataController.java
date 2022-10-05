@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +25,12 @@ public class DataController {
     public List<String> getKeys(Principal principal) {
         String user = principal.getName();
         List<Data> list = dataService.findByUser(user);
-        List<String> keys = list.stream().map(data -> data.getKey()).toList();
+        List<String> keys = list.stream().map(Data::getKey).toList();
         return keys;
     }
 
     @GetMapping(value = "/{*path}")
-    public Optional<String> getItem(@PathVariable(name = "path") String path, HttpServletRequest request, Principal principal) {
+    public Optional<String> getItem(@PathVariable(name = "path") String path, Principal principal) {
         String user = principal.getName();
         String key = path.substring(1).replace('/', ':');
         Optional<Data> data = dataService.findByUserAndKey(user, key);
@@ -44,7 +43,7 @@ public class DataController {
         String user = principal.getName();
         String key = path.substring(1).replace('/', ':');
         Optional<Data> data = dataService.findByUserAndKey(user, key);
-        if (!data.isPresent()) response.setStatus(404);
+        if (data.isEmpty()) response.setStatus(404);
         else response.setHeader("Last-Modified", data.get().getTimestamp().toInstant().toString());
         return "";
     }
@@ -53,9 +52,9 @@ public class DataController {
     public String setItem(@PathVariable(name = "path") String path, HttpEntity<String> httpEntity, Principal principal) {
         String user = principal.getName();
         String key = path.substring(1).replace('/', ':');
-        String json = httpEntity.getBody();
+        String value = httpEntity.getBody();
         dataService.deleteByUserAndKey(user, key);
-        dataService.save(new Data(user, key, json));
+        dataService.save(new Data(user, key, value));
         return "OK";
     }
 

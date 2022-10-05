@@ -10,7 +10,7 @@ Both needs an access token in the header.
 The original http driver does not support adding a header, so we can use
 this [modified http driver](https://www.npmjs.com/package/unstorage-driver-http-headers).
 
-The Auth API is a token to user map, a simple key-value store.
+The Auth API is a user to access token map, a simple key-value store.
 It can be called after a successful external authentication, for example from a simple NextAuth site.
 To access the Auth API we need to use a fix admin access token, defined by an environment variable (it is for now in the
 application.properties).
@@ -35,7 +35,7 @@ The Unstorage interface is implemented, however still need to implement:
 ## How to try
 
 Start this java server locally and connect to it from node.
-First add a token/user pair using the Auth API using an Unstorage client,
+First add a user/token pair using the Auth API using an Unstorage client,
 then create an other Unstorage client with the user's token.
 Then call it to store/access user data in the Data API.
 
@@ -85,7 +85,7 @@ const testServerWithAuth = async () => {
     const TOKEN = "token1"
     const USER = "user1"
     const authApi = getAuthApi()
-    await authApi.setItem(TOKEN, USER)
+    await authApi.setItem(USER, TOKEN)
     const storage = getDataApi(TOKEN)
     await storage.setItem("key1", "value1")
     const value1 = await storage.getItem("key1")

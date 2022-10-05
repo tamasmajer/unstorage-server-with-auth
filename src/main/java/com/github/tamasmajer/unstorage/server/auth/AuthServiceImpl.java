@@ -28,6 +28,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
+    public Integer deleteByUser(String user) {
+        return authRepository.deleteByUser(user);
+    }
+
+    @Transactional
+    @Override
     public Integer deleteByToken(String token) {
         return authRepository.deleteByToken(token);
     }
@@ -43,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<Auth> findByUser(String user) {
+    public Optional<Auth> findByUser(String user) {
         return authRepository.findByUser(user);
     }
 }
