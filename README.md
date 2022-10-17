@@ -50,7 +50,7 @@ cd unstorage-server-with-auth
 You will need a MySQL server to store the data.
 Set the connection parameters in the application.properties file.
 
-### How to create a simple NodeJS client
+### How to create a simple NodeJS client to test it
 
 Create a project, add Untorage and the driver:
 
